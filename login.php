@@ -18,8 +18,10 @@ session_start();
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
+    $hashed_password= md5($password);
+
     $stmt = $con->prepare("SELECT id, name FROM users WHERE email = ? AND password = ?");
-    $stmt->bind_param("ss", $email, $password);
+    $stmt->bind_param("ss", $email, $hashed_password);
     $stmt->execute();
     $stmt->store_result();
     if($stmt->num_rows > 0){

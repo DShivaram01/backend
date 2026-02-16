@@ -3,7 +3,7 @@
   session_start();
   require "db_connection.php";
 
-  if(!isset($_SESSION['user_id']))
+  if(isset($_SESSION['user_id']))
     {
       header("Location: dashboard.php");
       exit();
@@ -14,8 +14,10 @@
     $name = $_POST['name'];
     $email = $_POST['email'];
     $password = $_POST['password'];
+    $hashed_password= md5($password);
+
     $stmt = $con->prepare("INSERT INTO users (name, email, password) 	VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $name, $email, $password);
+    $stmt->bind_param("sss", $name, $email, $hashed_password);
     
     if ($stmt->execute()) {
       echo "
