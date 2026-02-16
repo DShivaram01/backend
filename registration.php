@@ -16,19 +16,40 @@
     $password = $_POST['password'];
     $hashed_password= md5($password);
 
-    $stmt = $con->prepare("INSERT INTO users (name, email, password) 	VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $name, $email, $hashed_password);
+    $check_stmt=$con->prepare("SELECT email from users where email=?");
+    $check_stmt->bind_param("s",$email);
+    $check_stmt->execute();
+    $check_stmt->store_result();
+
+    if($check_stmt->num_rows>0)
+      {
+        $check_stmt->bind_result($name);
+        $check_stmt->fetch();
+        
+        echo"Users already exist  ";
+        exit();
+      }
+      
+      
+    else
+      {
+      $stmt = $con->prepare("INSERT INTO users (name, email, password) 	VALUES (?, ?, ?)");
+      $stmt->bind_param("sss", $name, $email, $hashed_password);
     
-    if ($stmt->execute()) {
+      if ($stmt->execute()) {
       echo "
       <script>
         alert('New user added successfully! Please Log In');
         document.location = 'login.php';
       </script>";
-    } else {
+      } else {
       echo "Error: " . $stmt->error;
-    }
+       }
     $stmt->close();
+    }
+    $check_stmt->close();
+    
+
   }
 ?>
 
