@@ -30,7 +30,7 @@
         exit();
       }
       
-      
+       
     else
       {
       $stmt = $con->prepare("INSERT INTO users (name, email, password) 	VALUES (?, ?, ?)");
