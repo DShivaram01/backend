@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ survey.name }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 40px; }
+        .container { max-width: 700px; margin: 0 auto; }
+        h1 { color: #1E3A5F; }
+        .question { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        .question p { font-weight: bold; margin-top: 0; }
+        label { display: block; padding: 8px; margin: 5px 0; border-radius: 4px; cursor: pointer; }
+        label:hover { background: #f0f4ff; }
+        input[type=radio] { margin-right: 8px; }
+        button { background: #1E3A5F; color: white; padding: 12px 30px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>{{ survey.name }}</h1>
+    <form method="post" action="{{ path('app_survey_submit', {token: survey.token}) }}">
+        {% for question in survey.questions %}
+        <div class="question">
+            <p>{{ loop.index }}. {{ question.questionText }}</p>
+            {% set options = [question.correctAnswer]|merge(question.wrongOptions) %}
+            {% for option in options|sort %}
+                <label>
+                    <input type="radio" name="answers[{{ question.id }}]" value="{{ option }}" required>
+                    {{ option }}
+                </label>
+            {% endfor %}
+        </div>
+        {% endfor %}
+        <button type="submit">Submit Answers</button>
+    </form>
+</div>
+</body>
+</html>

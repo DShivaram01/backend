@@ -1,0 +1,31 @@
+security:
+    password_hashers:
+        App\Entity\Admin:
+            algorithm: auto
+
+    providers:
+        admin_provider:
+            entity:
+                class: App\Entity\Admin
+                property: username
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            lazy: true
+            provider: admin_provider
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                default_target_path: app_admin_dashboard
+            logout:
+                path: app_logout
+                target: app_login
+
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/survey, roles: PUBLIC_ACCESS }
