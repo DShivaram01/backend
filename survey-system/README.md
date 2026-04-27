@@ -163,41 +163,6 @@ What color is the sky?,Blue,Red,Green,Yellow
 5. The new survey appears in the list with its unique URL
 6. Share the URL with participants
 
-No code changes needed — just upload a new CSV!
-
----
-
-## ❓ Expected Professor Questions
-
-**Q: Why Symfony?**
-Symfony is a mature PHP framework with built-in security, ORM, and templating. It follows MVC architecture which keeps code organized.
-
-**Q: How is anonymity maintained?**
-Users access surveys via a unique URL token. No login is required. No personal data is collected. Responses are stored with only the survey ID and timestamp.
-
-**Q: What is a token?**
-A random 16-character string generated when a survey is created. It becomes the unique URL for that survey.
-
-**Q: How does CSV parsing work?**
-PHP built-in fgetcsv() reads each row. Column 0 = question, column 1 = correct answer, columns 2+ = wrong options. Wrong options are stored as JSON in the database.
-
-**Q: How is the admin secured?**
-Symfony security bundle handles authentication. security.yaml restricts all /admin routes to ROLE_ADMIN. Passwords are hashed with bcrypt.
-
-**Q: What is ManyToOne relationship here?**
-Each Question belongs to one Survey. Each Response belongs to one Survey. Many questions can belong to one survey.
-
-**Q: How are results downloaded?**
-The download route fetches all responses, loops through answers, builds a CSV string, and returns it with Content-Disposition: attachment header.
-
-**Q: What happens when a survey is turned OFF?**
-The isActive boolean is set to false. The survey route checks this and renders an inactive page instead of the questionnaire.
-
-**Q: Can the same user submit twice?**
-Yes — since there is no login, the system cannot prevent duplicate submissions. This is by design for anonymity.
-
-**Q: Where is the database?**
-MySQL running locally via XAMPP. The database survey_system has 4 tables: admin, survey, question, response.
 
 ---
 
